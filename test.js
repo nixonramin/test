@@ -1,4 +1,4 @@
-const apiKey= "MBJaNGZyrH0IGR_2oe_xgkfilnTgtpOvoPl6esVC7vo1s - Tj4xtM5cky8JEDlzajPNPjIhO91tTg7CnfGMXtNtZXIp3cl6OrHxpoujgqHKBS - iiJS6OKw1izb7UxXXYx"
+const apiKey= "MBJaNGZyrH0IGR_2oe_xgkfilnTgtpOvoPl6esVC7vo1s-Tj4xtM5cky8JEDlzajPNPjIhO91tTg7CnfGMXtNtZXIp3cl6OrHxpoujgqHKBS-iiJS6OKw1izb7UxXXYx"
 
 $(() => {
     function formatQueryParams(params) {
@@ -10,29 +10,28 @@ $(() => {
     function getRatings(query, maxResults = 50) {
         const params = {
             //by_state: query,
-            term: 'Gordon Biersch Brewery ',
+            term: 'Gordon Biersch Brewery',
             location: 'rockville',
             //sort: 'type,name',
         };
         const queryString = formatQueryParams(params)
-        const url = 'https://api.yelp.com/v3/businesses/search' + '?' + queryString;
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+        const reqEndPoint = 'https://api.yelp.com/v3/businesses/search'+'?'+ formatQueryParams(params)
+        const url = proxyUrl + reqEndPoint
 
-        console.log(url);
 
-        fetch(url, {
-            headers: {Authorization: `Bearer ${apiKey}`},
-            mode: 'cors'
-        })
-            .then(response => {
-                    return response.json();
+        fetch(url, {headers: {Authorization: `Bearer ${apiKey}`}})
+            .then(response => response.json())
+            .then(results => {
+                console.log(results)
+                $('#results').append(JSON.stringify(results))
             })
-            .then(results => console.log(results))
             .catch(err => {
                 console.log(err)
             });
     }
 
-    $('h1').click(getRatings)
+    $('button').click(getRatings)
     
 
 })
